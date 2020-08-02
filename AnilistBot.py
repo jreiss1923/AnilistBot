@@ -1,52 +1,99 @@
+import json
 import discord
 import requests
 import time
 
+client = discord.Client()
+TOKEN = open("token.txt", "r").readline()
+
+url = 'https://graphql.anilist.co'
+
 query = '''
-query ($name: String) { # Define which variables will be used in the query (id)
-  User (name: $name) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
-    id
-    name
+query ($userId: Int, $createdAt_greater: Int) {
+  Activity (userId: $userId, createdAt_greater: $createdAt_greater) {
+    ... on ListActivity {
+        createdAt
+        status
+        progress
+        media {
+            title {
+                romaji
+            }
+        }
+        user {
+            name
+        }
+    }
   }
 }
 '''
 
-# Define our query variables and values that will be used in the query request
-variables_pat = {
-    'id': 121769
-}
 
-variables_hani = {
-    'id': 320308
-}
+@client.event
+async def on_ready():
+    print("Bot is ready!")
+    channel = client.get_channel(458644594905710595)
+    await channel.send("Bot is ready!")
 
-variables_phil = {
-    'id': 163795
-}
 
-variables_alan = {
-    'id': 121839
-}
+@client.event
+async def my_background_task():
+    await client.wait_until_ready()
+    while not client.is_closed():
+        curr_time = int(time.time())
+        print(str(curr_time) + "current time")
+        variables_pat = {
+            'userId': 121769,
+            'createdAt_greater': curr_time
+        }
 
-variables_ben = {
-    'id': 122953
-}
+        variables_hani = {
+            'userId': 320308,
+            'createdAt_greater': curr_time
 
-variables_zen = {
-    'id': 382311
-}
+        }
 
-variables_me = {
-    'id': 323865
-}
+        variables_phil = {
+            'userId': 163795,
+            'createdAt_greater': curr_time
+        }
 
-url = 'https://graphql.anilist.co'
+        variables_alan = {
+            'userId': 121839,
+            'createdAt_greater': curr_time
+        }
 
-arr_vars = [variables_alan, variables_ben, variables_hani, variables_pat, variables_phil, variables_zen, variables_me]
+        variables_ben = {
+            'userId': 122953,
+            'createdAt_greater': curr_time
+        }
 
-# Make the HTTP Api request
-for variables in arr_vars:
-    response = requests.post(url, json={'query': query, 'variables': variables})
-    print(response.content)
+        variables_zen = {
+            'userId': 382311,
+            'createdAt_greater': curr_time
+        }
 
-print(int(time.time()))
+        variables_me = {
+            'userId': 323865,
+            'createdAt_greater': curr_time
+        }
+        arr_vars = [variables_alan, variables_ben, variables_hani, variables_pat, variables_phil, variables_zen,
+                    variables_me]
+        for variables in arr_vars:
+            response = requests.post(url, json={'query': query, 'variables': variables})
+            my_json = json.loads(response.content.decode('utf8').replace("'", '"'))
+            activity = my_json["data"]["Activity"]
+            if activity is not None:
+                print(activity["user"]["name"] + " " + activity["status"] + " " + activity["progress"] + " of " +
+                      activity["media"]["title"]["romaji"])
+                print(str(activity["createdAt"]) + "created at")
+                channel = client.get_channel(458644594905710595)
+                await channel.send(activity["user"]["name"] + " " + activity["status"] + " " + activity["progress"] + " of " +
+                      activity["media"]["title"]["romaji"])
+
+            else:
+                print("No activity")
+        time.sleep(30)
+
+client.loop.create_task(my_background_task())
+client.run(TOKEN)
