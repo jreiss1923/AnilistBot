@@ -96,7 +96,6 @@ async def my_background_task():
                         color=discord.Color(0x039AFF),
                         description=result_string
                     )
-                    await channel.send(result_string)
                     await channel.send(embed=result_embed)
                 else:
                     result_string = activity["user"]["name"] + " " + activity["status"] + " " + activity["media"]["title"]["romaji"]
@@ -105,7 +104,6 @@ async def my_background_task():
                         color=discord.Color(0x039AFF),
                         description=result_string
                     )
-                    await channel.send(result_string)
                     await channel.send(embed=result_embed)
         time.sleep(60)
 
