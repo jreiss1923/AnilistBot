@@ -38,7 +38,7 @@ async def on_ready():
 async def my_background_task():
     await client.wait_until_ready()
     while not client.is_closed():
-        curr_time = int(time.time()-30)
+        curr_time = int(time.time()-1)
         print(str(curr_time) + "current time")
         variables_pat = {
             'userId': 121769,
@@ -105,7 +105,6 @@ async def my_background_task():
                         description=result_string
                     )
                     await channel.send(embed=result_embed)
-        time.sleep(60)
 
 client.loop.create_task(my_background_task())
 client.run(TOKEN)
