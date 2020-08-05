@@ -38,7 +38,7 @@ async def on_ready():
 async def my_background_task():
     await client.wait_until_ready()
     while not client.is_closed():
-        curr_time = int(time.time())
+        curr_time = int(time.time()-30)
         print(str(curr_time) + "current time")
         variables_pat = {
             'userId': 121769,
@@ -88,6 +88,7 @@ async def my_background_task():
             activity = my_json["data"]["Activity"]
             if activity is not None:
                 channel = client.get_channel(458644594905710595)
+                print(activity)
                 if activity["progress"] is not None:
                     result_string = activity["user"]["name"] + " " + activity["status"] + " " + activity["progress"] + " of " + activity["media"]["title"]["romaji"]
                     result_embed = discord.Embed(
@@ -106,9 +107,7 @@ async def my_background_task():
                     )
                     await channel.send(result_string)
                     await channel.send(embed=result_embed)
-            else:
-                print("No activity")
-        time.sleep(30)
+        time.sleep(60)
 
 client.loop.create_task(my_background_task())
 client.run(TOKEN)
