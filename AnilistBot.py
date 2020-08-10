@@ -2,9 +2,11 @@ import json
 import discord
 import requests
 import time
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 client = discord.Client()
-TOKEN = open("token.txt", "r").readline()
 
 url = 'https://graphql.anilist.co'
 
@@ -106,4 +108,4 @@ async def my_background_task():
                     await channel.send(embed=result_embed)
 
 client.loop.create_task(my_background_task())
-client.run(TOKEN)
+client.run(os.getenv("DISCORD_TOKEN"))
