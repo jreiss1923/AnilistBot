@@ -36,8 +36,7 @@ async def my_background_task():
     await client.wait_until_ready()
     channel = client.get_channel(458644594905710595)
     while not client.is_closed():
-        curr_time = int(time.time()-5)
-        await channel.send(curr_time)
+        curr_time = int(time.time()-3)
         variables_pat = {
             'userId': 121769,
             'createdAt_greater': curr_time
