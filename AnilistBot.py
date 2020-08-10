@@ -104,5 +104,4 @@ async def my_background_task():
                     await channel.send(embed=result_embed)
 
 client.loop.create_task(my_background_task())
-client.loop.create_task(on_message())
 client.run(os.getenv("DISCORD_TOKEN"))
