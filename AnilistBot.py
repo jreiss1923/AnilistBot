@@ -27,18 +27,17 @@ query ($userId: Int, $createdAt_greater: Int) {
   }
 }
 '''
-
-
 @client.event
-async def on_ready():
-    print("Bot is ready!")
-
+async def on_message(message):
+    if message.content == ".help":
+        channel = message.channel
+        await channel.send("oops")
 
 @client.event
 async def my_background_task():
     await client.wait_until_ready()
     while not client.is_closed():
-        curr_time = int(time.time()-1)
+        curr_time = int(time.time()+1)
         print(str(curr_time) + "current time")
         variables_pat = {
             'userId': 121769,
