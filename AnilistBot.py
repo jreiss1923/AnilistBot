@@ -33,10 +33,11 @@ query ($userId: Int, $createdAt_greater: Int) {
 
 @client.event
 async def my_background_task():
+    await client.wait_until_ready()
     channel = client.get_channel(458644594905710595)
     while not client.is_closed():
         curr_time = int(time.time())
-        await channel.send(str(curr_time) + " is the current time")
+        print(str(curr_time) + "current time")
         variables_pat = {
             'userId': 121769,
             'createdAt_greater': curr_time
@@ -84,6 +85,7 @@ async def my_background_task():
             my_json = json.loads(response.content)
             activity = my_json["data"]["Activity"]
             if activity is not None:
+
                 print(activity)
                 if activity["progress"] is not None:
                     result_string = activity["user"]["name"] + " " + activity["status"] + " " + activity["progress"] + " of " + activity["media"]["title"]["romaji"]
