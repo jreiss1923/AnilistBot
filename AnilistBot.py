@@ -36,7 +36,7 @@ async def my_background_task():
     await client.wait_until_ready()
     channel = client.get_channel(458644594905710595)
     while not client.is_closed():
-        curr_time = int(time.time()-3)
+        curr_time = int(time.time()-2)
         variables_pat = {
             'userId': 121769,
             'createdAt_greater': curr_time
@@ -82,7 +82,7 @@ async def my_background_task():
         for variables in arr_vars:
             response = requests.post(url, json={'query': query, 'variables': variables})
             my_json = json.loads(response.content)
-            if my_json is not None and my_json["data"]["Activity"] is not None:
+            if my_json["data"] is not None and my_json["data"]["Activity"] is not None:
                 activity = my_json["data"]["Activity"]
                 print(activity)
                 if activity["progress"] is not None:
