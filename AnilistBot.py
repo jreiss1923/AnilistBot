@@ -82,9 +82,8 @@ async def my_background_task():
         for variables in arr_vars:
             response = requests.post(url, json={'query': query, 'variables': variables})
             my_json = json.loads(response.content)
-            activity = my_json["data"]["Activity"]
-            if activity is not None:
-
+            if my_json is not None and my_json["data"]["Activity"] is not None:
+                activity = my_json["data"]["Activity"]
                 print(activity)
                 if activity["progress"] is not None:
                     result_string = activity["user"]["name"] + " " + activity["status"] + " " + activity["progress"] + " of " + activity["media"]["title"]["romaji"]
