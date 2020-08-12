@@ -30,13 +30,18 @@ query ($userId: Int, $createdAt_greater: Int) {
 }
 '''
 
+@client.event
+async def on_message(message):
+    if message == ".help":
+        message.channel.send("test")
+
 
 @client.event
 async def my_background_task():
     await client.wait_until_ready()
     channel = client.get_channel(458644594905710595)
     while not client.is_closed():
-        curr_time = int(time.time()-2)
+        curr_time = int(time.time()-1)
         variables_pat = {
             'userId': 121769,
             'createdAt_greater': curr_time
