@@ -1,1 +1,1 @@
-worker: python friend_tracker.py
+worker: python AnilistBot.py
